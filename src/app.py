@@ -35,10 +35,19 @@ This has 0 external dependencies :) Useable anywhere you can download python3
 - Noah 
 """
 
+def run_cli(command):
+    try:
+        output = subprocess.run(command.split(), capture_output=True)
+    except:
+        # In python 3.6>=, we need to use the pipes instead
+        output = subprocess.run(command.split, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    return output
+
 def get_toplevel_repo():
     """Returns the toplevel git repo directory"""
     command = "git rev-parse --show-toplevel"
-    result = subprocess.run(command.split(), capture_output = True)
+    result = run_cli(command)
     output = result.stdout.decode("utf-8").strip()
     return output
 
@@ -61,7 +70,7 @@ def get_files(commit = "HEAD"):
     testme/tests/app_test.py
     testme/tests/sample.sh
     """
-    result = subprocess.run("git diff-tree --name-only -r HEAD".split(), capture_output = True)
+    result = run_cli("git diff-tree --name-only -r HEAD")
     output_string = result.stdout.decode("utf-8")
     files = output_string.split("\n")
     # Remove the first item, which is the commit sha
@@ -104,7 +113,7 @@ def run_test(
         print_stderr = SHOULD_PRINT_STDERR):
     """Run the test and return True if the test passed"""
     print("🔎 " + str(test_path))
-    output = subprocess.run([test_runner_path, str(test_path.resolve())], capture_output=True)
+    output = run_cli(f"{test_runner_path} {str(test_path.resolve())}")
     output_string = output.stdout.decode("utf-8").strip()
     error_string = output.stderr.decode("utf-8").strip()
     return_code = output.returncode
