@@ -41,7 +41,7 @@ def run_cli(command):
         output = subprocess.run(command.split(), capture_output=True)
     except:
         # In python 3.6>=, we need to use the pipes instead
-        output = subprocess.run(command.split, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        output = subprocess.run(command.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     return output
 
