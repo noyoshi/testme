@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import subprocess
 import os
+import sys
 
 from pathlib import Path
 
@@ -55,7 +56,14 @@ REPO_PATH_STRING = get_toplevel_repo()
 REPO_PATH = Path(REPO_PATH_STRING)
 TESTME_PATH = REPO_PATH / ".testme"
 TESTME_RUNNER_PATH = TESTME_PATH / "test_runner"
+
 SHOULD_PRINT_STDOUT = False
+
+# Read CLI arg - if you want to see debug output provide 'debug' arg
+if len(sys.argv) > 1:
+    if sys.argv[1] == "debug":
+        SHOULD_PRINT_STDOUT = True
+        
 SHOULD_PRINT_STDERR = False
 
 # Assume we are calling from the root of the repo?
@@ -158,7 +166,7 @@ def run(repo_path = REPO_PATH, testme_path = TESTME_PATH, test_runner_path = TES
     if not test_paths:
         return
 
-    print(blue("Found:").italics().to_str() + "\n📄 " + "\n📄 ".join(map(str, test_paths)))
+    print(blue("Found:").italics().to_str() + "\n📄  " + "\n📄  ".join(map(str, test_paths)))
     
     tests = []
 
@@ -178,9 +186,9 @@ def run(repo_path = REPO_PATH, testme_path = TESTME_PATH, test_runner_path = TES
     for test_path, passed in tests:
         test_path = str(test_path)
         if passed:
-            print("✅ " + green(test_path))
+            print("✅  " + green(test_path))
         else:
-            print("❌ " + red(test_path))
+            print("❌  " + red(test_path))
 
 
     # Return 1 if a test failed
