@@ -120,7 +120,7 @@ def run_test(
         print_stdout = SHOULD_PRINT_STDOUT, 
         print_stderr = SHOULD_PRINT_STDERR):
     """Run the test and return True if the test passed"""
-    print("🔎 " + str(test_path))
+    print("🔎  " + str(test_path))
     output = run_cli(f"{test_runner_path} {str(test_path.resolve())}")
     output_string = output.stdout.decode("utf-8").strip()
     error_string = output.stderr.decode("utf-8").strip()
